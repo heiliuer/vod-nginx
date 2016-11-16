@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>悦动影视</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="referrer" content="no-referrer"/>
+    <title>Hello</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <link rel="stylesheet" href="vendor/sm.css">
+    <link rel="stylesheet" href="vendor/sm-extend.css">
+    <link rel="stylesheet" href="vendor/animate.css">
+    <style>
+        video{
+            position: fixed;
+            height:10rem;
+            z-index: 200;
+            background-color: #fff;
+        }
+        .buttons-tab{
+            position: fixed;
+            width: 100%;
+            top: 200px;
+            left: 0;
+            z-index: 200;
+        }
+        .tabs{
+            padding-top: 12rem;
+        }
+        .list-block{
+            margin: 0!important;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+
+    <div class="page-group">
+        <!-- 单个page ,第一个.page默认被展示-->
+        <div class="page">
+            <!-- 标题栏 -->
+            <!--<header class="bar bar-nav">
+                <a class="icon icon-me pull-left open-panel"></a>
+                <h1 class="title">标题</h1>
+            </header>-->
+
+            <!-- 工具栏 -->
+            <!--<nav class="bar bar-tab">
+                <a class="tab-item external active" href="#">
+                    <span class="icon icon-home"></span>
+                    <span class="tab-label">首页</span>
+                </a>
+                <a class="tab-item external" href="#">
+                    <span class="icon icon-star"></span>
+                    <span class="tab-label">收藏</span>
+                </a>
+                <a class="tab-item external" href="#">
+                    <span class="icon icon-settings"></span>
+                    <span class="tab-label">设置</span>
+                </a>
+            </nav>-->
+
+            <!-- 这里是页面内容区 -->
+            <div class="content">
+                <video id="video" width="100%" src="" autoplay controls></video>
+                <div class="buttons-tab">
+                    <template v-for="(index,data) in datas">
+                        <a href="#tab{{index}}" class="tab-link {{index==0?'active':''}} button"
+                           v-text="data.folder"></a>
+                    </template>
+                </div>
+                <div class="tabs">
+                    <template v-for="(index,data) in datas">
+                        <div id="tab{{index}}" class="tab {{index==0?'active':''}}">
+                            <div class="list-block">
+                                <ul>
+                                    <template v-for="file in data.files">
+                                        <li @click="refresh(data,file)" class="item-content item-link">
+                                            <!--<div class="item-media"><i class="icon icon-f7"></i></div>-->
+                                            <div class="item-inner">
+                                                <div class="item-title"  v-text="file"></div>
+                                                <!--<div class="item-after">杜蕾斯</div>-->
+                                            </div>
+                                        </li>
+                                    </template>
+                                </ul>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+</body>
+<script src="vendor/Zepto.js"></script>
+<script>
+    $.config = {
+        router: false
+    };
+</script>
+<script src="vendor/sm.js"></script>
+<script src="vendor/sm-extend.js"></script>
+<script src="vendor/vue.js"></script>
+<script src="index.js"></script>
+</html>
