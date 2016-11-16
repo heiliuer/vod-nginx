@@ -38,7 +38,11 @@ def walk_files_by_suffix(folder, suffixs):
 
                 # F: / 其他 / 影音
                 # print(os.path.commonprefix([folder, rt]))
-                relativeFiles.append(f.replace(folder, ''))
+                rpath = rt.replace(folder, '')
+                if len(rpath) > 0 and rpath[0] == os.path.sep:
+                    rpath = rpath[1:]
+                # print(rpath, os.path.join(rpath, f))
+                relativeFiles.append(os.path.join(rpath, f))
 
     return relativeFiles
 
