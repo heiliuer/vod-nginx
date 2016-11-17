@@ -19,7 +19,9 @@
 ### 如何使用
 
 - 修改 `refresh_files/folders.ini` 文件，指定视频文件所在目录，以回车隔开，例如：
+
     `d:\Users\Administrator\Pictures`
+    
     `H:\videos`
 
 - 在nginx 1.7.11.3 Gryphon目录运行命令，启动nginx   
