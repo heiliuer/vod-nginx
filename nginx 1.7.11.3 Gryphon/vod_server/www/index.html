@@ -14,21 +14,30 @@
     <link rel="stylesheet" href="vendor/sm-extend.css">
     <link rel="stylesheet" href="vendor/animate.css">
     <style>
-        video{
+        .video{
             position: fixed;
-            height:10rem;
+            width: 100%;
+            height: 0;
+            padding-bottom: 56.25%;
             z-index: 200;
-            background-color: #fff;
+            background-color: #000;
+        }
+        .video video{
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
         }
         .buttons-tab{
             position: fixed;
             width: 100%;
-            top: 200px;
-            left: 0;
-            z-index: 200;
+           padding-top: 56.25%;
         }
         .tabs{
-            padding-top: 12rem;
+            padding-top: calc(56.25% + 2rem);
         }
         .list-block{
             margin: 0!important;
@@ -65,7 +74,9 @@
 
             <!-- 这里是页面内容区 -->
             <div class="content">
-                <video id="video" width="100%" src="" autoplay controls></video>
+                <div class="video">
+                    <video id="video" width="100%"  src="" autoplay controls></video>
+                </div>
                 <div class="buttons-tab">
                     <template v-for="(index,data) in datas">
                         <a href="#tab{{index}}" class="tab-link {{index==0?'active':''}} button"
