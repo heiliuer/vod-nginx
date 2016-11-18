@@ -108,7 +108,8 @@ function initApp(datas) {
             host: "/",
             datas: datas,
             cFile: null,
-            searchKey: ""
+            searchKey: "",
+            searchFiles: searchData
         },
         methods: {
             showItemKeysAction: showItemKeysAction,
@@ -116,8 +117,8 @@ function initApp(datas) {
             refresh: function (data, file) {
                 var url = this.host + data.uid + '/' + file.path;
                 video.src = url;
-                document.title = file.name
-                cFile = file
+                document.title = file.name;
+                this.cFile = file;
                 setTimeout(function () {
                     video.play();
                 }, 200);
@@ -129,31 +130,32 @@ function initApp(datas) {
                 this.searchKey = key;
             }
         },
-        computed: {
-            playUid: function () {
-                return this.cFile ? this.cFile.uid : "";
-            },
-            searchFiles: function () {
-                console.log("change searchKey:",this.searchKey);
+        watch: {
+            "searchKey": function (key) {
+                console.log("change searchKey:", key);
                 var that = this;
                 document.querySelector('#search').blur();
-                if (this.searchKey) {
-                    addHistory(this.searchKey);
+                if (key) {
+                    addHistory(key);
                     that.datas.forEach(function (data, index) {
                         var files = [];
                         data.files.forEach(function (file) {
-                            if (file.name.indexOf(that.searchKey) != -1) {
+                            if (file.name.indexOf(key) != -1) {
                                 files.push(file);
-                                console.log("find file:",file.name);
                             }
                         });
-                        searchData[index].files = files;
+                        that.searchFiles[index].files = files;
                     });
-
-                    return searchData;
                 } else {
-                    return this.datas;
+                    that.datas.forEach(function (data, index) {
+                        that.searchFiles[index].files = data.files;
+                    });
                 }
+            }
+        },
+        computed: {
+            playUid: function () {
+                return this.cFile ? this.cFile.uid : "";
             }
         },
         ready: function () {
