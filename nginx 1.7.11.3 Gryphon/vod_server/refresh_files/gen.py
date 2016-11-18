@@ -5,6 +5,8 @@ import hashlib
 import json
 import os
 import config
+import subprocess
+import re
 
 FILE_JSON = config.CONFIGS['FILE_JSON']
 
@@ -13,6 +15,8 @@ FILE_CONFIG = config.CONFIGS['FILE_CONFIG']
 FILE_FFMPEG = config.CONFIGS['FILE_FFMPEG']
 
 FILE_NGINX_CONFIG = config.CONFIGS['FILE_NGINX_CONFIG']
+
+FILE_PATH_IMAGES = config.CONFIGS['FILE_PATH_IMAGES']
 
 md5 = hashlib.md5()
 
@@ -58,6 +62,34 @@ def create_ffmpeg_img(video_file, img_path, size=(300, 200)):
             os.chdir(cwd)
 
 
+def get_video_info(video_file):
+    info = dict()
+    if os.path.isfile(video_file):
+        cwd = os.getcwd()
+        dirname = os.path.dirname(FILE_FFMPEG)
+        dir_valid = len(dirname) > 0
+        ffmpeg = FILE_FFMPEG
+        if dir_valid:
+            os.chdir(dirname)
+            ffmpeg = os.path.basename(FILE_FFMPEG)
+        cmd = ffmpeg + " -i  \"{}\"".format(video_file)
+
+        try:
+            result = subprocess.check_output(cmd, shell=False, stderr=subprocess.STDOUT)
+        except Exception as e:
+            result = e.output.decode()
+        p_result = re.findall(r",[\s]*([\d]*)x([\d]*),", result)
+        if len(p_result) > 0:
+            size = p_result[0]
+            info.update({'size': size})
+        p_result = re.findall(r"Duration: ([\d.:]+),", result)
+        if len(p_result) > 0:
+            info.update({'time': p_result[0]})
+        if dir_valid:
+            os.chdir(cwd)
+    return info
+
+
 def walk_files_by_suffix(folder, suffixs):
     # folder F:/其他/影音
     relativeFiles = []
@@ -84,9 +116,11 @@ def walk_files_by_suffix(folder, suffixs):
                 uid = str(md5.hexdigest())
 
                 img_file = uid + '.png'
-                img_path = os.path.join("images", img_file)
+                img_path = os.path.join(FILE_PATH_IMAGES, img_file)
 
                 create_ffmpeg_img(absolute_file, img_path)
+
+                info = get_video_info(absolute_file)
 
                 md5.update(absolute_file.encode("utf-8"))
 
@@ -96,7 +130,8 @@ def walk_files_by_suffix(folder, suffixs):
                     'name': fname[0],
                     'suffix': suffix,
                     'ctime': int(os.stat(absolute_file).st_ctime) * 1000,
-                    'thumb_path': img_path
+                    'thumb_path': os.path.join(os.path.basename(os.path.dirname(os.path.abspath(img_path))), img_file),
+                    'info': info
                 }
                 relativeFiles.append(data)
 

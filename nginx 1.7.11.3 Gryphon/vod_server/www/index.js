@@ -12,6 +12,7 @@ $.get("files.json", function (datas) {
 
 
 function initApp(datas) {
+    var video = document.querySelectorAll('#video')[0];
     new Vue({
         el: "#app",
         data: {
@@ -21,10 +22,9 @@ function initApp(datas) {
         },
         methods: {
             refresh: function (data, file) {
-                var url = this.host + data.uid + '/' + file;
-                console.log(url)
-                document.querySelectorAll('#video')[0].src = url;
-                document.title = file
+                var url = this.host + data.uid + '/' + file.path;
+                video.src = url;
+                document.title = file.name
             }
         },
         ready: function () {

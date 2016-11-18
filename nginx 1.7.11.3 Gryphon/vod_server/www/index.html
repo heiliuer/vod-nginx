@@ -80,23 +80,34 @@
                 <div class="buttons-tab">
                     <template v-for="(index,data) in datas">
                         <a href="#tab{{index}}" class="tab-link {{index==0?'active':''}} button"
-                           v-text="data.folder"></a>
+                           v-text="data.name"></a>
                     </template>
                 </div>
                 <div class="tabs">
                     <template v-for="(index,data) in datas">
                         <div id="tab{{index}}" class="tab {{index==0?'active':''}}">
-                            <div class="list-block">
+                            <div class="list-block media-list">
                                 <ul>
                                     <template v-for="file in data.files">
-                                        <li @click="refresh(data,file)" class="item-content item-link">
-                                            <!--<div class="item-media"><i class="icon icon-f7"></i></div>-->
-                                            <div class="item-inner">
-                                                <div class="item-title"  v-text="file"></div>
-                                                <!--<div class="item-after">杜蕾斯</div>-->
+                                        <li @click="refresh(data,file)">
+                                            <div class="item-content">
+                                                <div class="item-media"><img :src="file.thumb_path" style='width: 2.2rem;'></div>
+                                                <div class="item-inner">
+                                                    <div class="item-title-row">
+                                                        <div class="item-title">
+                                                            <span v-text="file.name"></span>
+                                                            <span v-if="file.info.size">
+                                                                {{file.info.size[0]}}_{{file.info.size[1]}}
+                                                            </span>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="item-subtitle" v-text="file.ctime| date '%Y-%m-%d'"></div>
+                                                </div>
                                             </div>
                                         </li>
                                     </template>
+
                                 </ul>
                             </div>
                         </div>
@@ -119,5 +130,6 @@
 <script src="vendor/sm.js"></script>
 <script src="vendor/sm-extend.js"></script>
 <script src="vendor/vue.js"></script>
+<script src="vendor/vue-filter.min.js"></script>
 <script src="index.js"></script>
 </html>

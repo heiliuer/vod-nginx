@@ -7,5 +7,7 @@ CONFIGS = {
 
     'FILE_FFMPEG': "../../ffmpeg",
 
-    'FILE_NGINX_CONFIG': "../confs/datas.conf"
+    'FILE_NGINX_CONFIG': "../confs/datas.conf",
+
+    'FILE_PATH_IMAGES': "../www/images"
 }
