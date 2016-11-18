@@ -4,11 +4,14 @@
 import os
 import json
 import uuid
+import hashlib
+
 
 FILE_JSON = "../www/files.json"
 
 FILE_CONFIG = "folders.ini"
 
+md5 = hashlib.md5()
 
 def read_folder_config(file_config):
     folders = []
@@ -55,7 +58,8 @@ def handle(suffixs, file_config=FILE_CONFIG, file_json=FILE_JSON):
         files = walk_files_by_suffix(folder, suffixs)
         size += len(files)
         if len(files) > 0:
-            data.append({'folder': folder, 'files': files, 'uid': str(uuid.uuid1())})
+            md5.update(folder.encode("utf-8"))
+            data.append({'folder': folder, 'files': files, 'uid': str(md5.hexdigest())})
     write_json(data, file_json)
     print("files total count:%d" % size)
     return data

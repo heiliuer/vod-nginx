@@ -15,7 +15,8 @@ function initApp(datas) {
     new Vue({
         el: "#app",
         data: {
-            host: location.protocol + "//" + location.hostname + ":7777/",
+            /*host: location.protocol + "//" + location.hostname + ":7777/",*/
+            host: "/",
             datas: datas
         },
         methods: {
