@@ -14,15 +14,17 @@
     <link rel="stylesheet" href="vendor/sm-extend.css">
     <link rel="stylesheet" href="vendor/animate.css">
     <style>
-        .video{
+        .video {
             position: fixed;
             width: 100%;
             height: 0;
             padding-bottom: 56.25%;
             z-index: 200;
             background-color: #000;
+            z-index: 101;
         }
-        .video video{
+
+        .video video {
             width: 100%;
             height: 100%;
             position: absolute;
@@ -30,18 +32,56 @@
             top: 0;
             right: 0;
             bottom: 0;
+            z-index: 101;
         }
-        .buttons-tab{
+
+        .buttons-tab {
             position: fixed;
             width: 100%;
-           padding-top: 56.25%;
+            padding-top: 56.25%;
+            z-index: 100;
         }
-        .tabs{
-            padding-top: calc(56.25% + 2rem);
+
+        .tabs {
+            padding-top: calc(56.25% + 2.5rem);
+            padding-bottom: 0.5rem;
         }
-        .list-block{
-            margin: 0!important;
+
+        .list-block {
+            margin: 0 !important;
         }
+
+        .content-block-title {
+            margin: 0.5rem;
+        }
+
+        #tab_search .content-padded {
+            margin-top: 0;
+        }
+
+        .search-input .icon-remove {
+            left: auto;
+            right: 0.3rem;
+        }
+
+        .search-input [type='search'] {
+            padding: 0.5rem;
+        }
+
+        .searchbar .button {
+            background-color: transparent;
+            color: #6d6d72;
+            padding: 0;
+        }
+        .searchbar .button:active{
+            background-color: transparent;
+            opacity: 0.7;
+        }
+        .action-search{
+            font-size: 0.9em;
+            float: right;
+        }
+
     </style>
 </head>
 <body>
@@ -75,34 +115,81 @@
             <!-- 这里是页面内容区 -->
             <div class="content">
                 <div class="video">
-                    <video id="video" width="100%"  src="" autoplay controls></video>
+                    <video id="video" width="100%" src="" autoplay controls></video>
                 </div>
                 <div class="buttons-tab">
+                    <a href="#tab_search" class="tab-link active button">搜索</a>
                     <template v-for="(index,data) in datas">
-                        <a href="#tab{{index}}" class="tab-link {{index==0?'active':''}} button"
+                        <a href="#tab{{index}}" class="tab-link  button"
                            v-text="data.name"></a>
                     </template>
                 </div>
                 <div class="tabs">
-                    <template v-for="(index,data) in datas">
-                        <div id="tab{{index}}" class="tab {{index==0?'active':''}}">
-                            <div class="list-block media-list">
+                    <div id="tab_search" class="tab active">
+                        <div class="content-padded">
+                            <div class="searchbar row">
+                                <a @click="showAction" class="button button-fill button-primary col-15">历史</a>
+                                <div class="search-input col-85">
+                                    <label @click="clear" class="icon icon-remove"></label>
+                                    <input lazy v-model="searchKey" type="search" id='search' placeholder='输入关键字...'/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="list-block media-list">
+                            <template v-for="data in searchFiles" v-if="data.files.length>0">
+                                <div class="content-block-title" v-text="data.folder"></div>
                                 <ul>
                                     <template v-for="file in data.files">
-                                        <li @click="refresh(data,file)">
+                                        <li :class="{'play':playUid.uid==file.uid}">
                                             <div class="item-content">
-                                                <div class="item-media"><img :src="file.thumb_path" style='width: 2.2rem;'></div>
+                                                <div class="item-media"><img :src="file.thumb_path"
+                                                                             style='width: 2.2rem;'></div>
                                                 <div class="item-inner">
                                                     <div class="item-title-row">
-                                                        <div class="item-title">
+                                                        <div @click="refresh(data,file)" class="item-title">
                                                             <span v-text="file.name"></span>
                                                             <span v-if="file.info.size">
                                                                 {{file.info.size[0]}}_{{file.info.size[1]}}
                                                             </span>
-
                                                         </div>
                                                     </div>
-                                                    <div class="item-subtitle" v-text="file.ctime| date '%Y-%m-%d'"></div>
+                                                    <div class="item-subtitle">
+                                                        <span v-text="file.ctime| date '%Y-%m-%d'"></span>
+                                                        <span class="action-search" @click="showItemKeysAction(file.name)">搜索</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </template>
+                                </ul>
+                            </template>
+                        </div>
+                    </div>
+
+                    <template v-for="(index,data) in datas">
+
+                        <div id="tab{{index}}" class="tab">
+                            <div class="list-block media-list">
+                                <ul>
+                                    <template v-for="file in data.files">
+                                        <li :class="{'play':playUid.uid==file.uid}">
+                                            <div class="item-content">
+                                                <div class="item-media"><img :src="file.thumb_path"
+                                                                             style='width: 2.2rem;'></div>
+                                                <div class="item-inner">
+                                                    <div class="item-title-row">
+                                                        <div @click="refresh(data,file)" class="item-title">
+                                                            <span v-text="file.name"></span>
+                                                            <span v-if="file.info.size">
+                                                                {{file.info.size[0]}}_{{file.info.size[1]}}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="item-subtitle">
+                                                        <span v-text="file.ctime| date '%Y-%m-%d'"></span>
+                                                        <span class="action-search" @click="showItemKeysAction(file.name)">搜索</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </li>
@@ -121,7 +208,7 @@
 
 
 </body>
-<script src="vendor/Zepto.js"></script>
+<script src="vendor/zepto.js"></script>
 <script>
     $.config = {
         router: false

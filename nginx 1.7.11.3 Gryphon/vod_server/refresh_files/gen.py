@@ -55,7 +55,7 @@ def create_ffmpeg_img(video_file, img_path, size=(300, 200)):
         if dir_valid:
             os.chdir(dirname)
             ffmpeg = os.path.basename(FILE_FFMPEG)
-        cmd = ffmpeg + " -itsoffset -1 -i \"{}\" -vcodec mjpeg -vframes 1 -an -f rawvideo -s {} \"{}\"".format(
+        cmd = ffmpeg + " -itsoffset -1 -i \"{}\" -vcodec mjpeg -vframes 10 -an -f rawvideo -s {} \"{}\"".format(
             video_file, size_str, img_path)
         os.system(cmd)
         if dir_valid:
@@ -134,9 +134,11 @@ def walk_files_by_suffix(folder, suffixs):
                     'info': info
                 }
                 relativeFiles.append(data)
-
+    relativeFiles = sorted(relativeFiles,key = sort_time,reverse = True)
     return relativeFiles
 
+def sort_time(data):
+    return data['ctime']
 
 def handle(suffixs, file_config=FILE_CONFIG, file_json=FILE_JSON):
     folders = read_folder_config(file_config)
