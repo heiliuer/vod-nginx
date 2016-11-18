@@ -3,12 +3,10 @@
 ### 架构
 
 - nginx输出视频流
-- node http-server模块搭建简单http服务器
 - python扫描指定目录的视频文件，并生成nginx，node http-server的配置数据
 
 ### 运行环境
 
-- nodejs
 - python
 
 ### 效果图
@@ -18,7 +16,7 @@
 
 ### 如何使用
 
-- 修改 `refresh_files/folders.ini` 文件，指定视频文件所在目录，以回车隔开，例如：
+- 修改 `nginx 1.7.11.3 Gryphon/vod_server/refresh_files/folders.ini` 文件，指定视频文件所在目录，以回车隔开，例如：
 
     `d:\Users\Administrator\Pictures`
     

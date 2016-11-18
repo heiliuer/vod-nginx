@@ -68,7 +68,7 @@ def write_json(data, file_json=FILE_JSON):
 
 if __name__ == "__main__":
     datas = handle(["mp4", "mp3"])
-    f = open("../datas.conf", 'w', encoding="utf-8")
+    f = open("../confs/datas.conf", 'w', encoding="utf-8")
     f.write('#generated file,do not edit\n')
     for data in datas:
         # print(data['uid'], data['folder'])
