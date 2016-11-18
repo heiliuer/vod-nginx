@@ -3,7 +3,7 @@
 ### 架构
 
 - nginx输出视频流
-- python扫描指定目录的视频文件，并生成nginx，node http-server的配置数据
+- python扫描指定目录的视频文件，并生成nginx的配置数据
 
 ### 运行环境
 
