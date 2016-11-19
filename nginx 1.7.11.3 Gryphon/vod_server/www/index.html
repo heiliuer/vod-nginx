@@ -5,7 +5,6 @@
     <title>悦动影视</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="referrer" content="no-referrer"/>
-    <title>Hello</title>
     <meta name="viewport" content="initial-scale=1, maximum-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -74,7 +73,7 @@
                                     <template v-for="file in data.files">
                                         <li :class="{'play':playUid==file.uid}">
                                             <div class="item-content">
-                                                <div class="item-media"><img :src="file.thumb_path"
+                                                <div class="item-media" @click="showImg(file.thumb_path)"><img :src="file.thumb_path"
                                                                              style='width: 2.2rem;'></div>
                                                 <div class="item-inner">
                                                     <div class="item-title-row">
@@ -107,7 +106,7 @@
                                     <template v-for="file in data.files">
                                         <li :class="{'play':playUid==file.uid}">
                                             <div class="item-content">
-                                                <div class="item-media"><img :src="file.thumb_path"
+                                                <div class="item-media" @click="showImg(file.thumb_path)"><img :src="file.thumb_path"
                                                                              style='width: 2.2rem;'></div>
                                                 <div class="item-inner">
                                                     <div class="item-title-row">

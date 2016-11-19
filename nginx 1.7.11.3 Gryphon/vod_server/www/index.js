@@ -128,6 +128,12 @@ function initApp(datas) {
             },
             search: function (key) {
                 this.searchKey = key;
+            },
+            showImg: function (img) {
+                $.photoBrowser({
+                    photos: [img],
+                    type: 'popup'
+                }).open();
             }
         },
         watch: {
