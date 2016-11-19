@@ -11,7 +11,7 @@
 
 ### 效果图
 
-![](screenshot/2.png) ![](screenshot/2.png)
+![](screenshot/2.png) ![](screenshot/1.png) 
 
 
 ### 如何使用
