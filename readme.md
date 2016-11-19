@@ -26,7 +26,7 @@
 
     `start nginx`
         
-- 在项目根目录运行命令，扫描视频文件，启动http-server
+- 在项目根目录运行命令，扫描视频文件
 
     `start-vod.bat`
     
