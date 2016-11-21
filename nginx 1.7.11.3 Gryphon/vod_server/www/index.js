@@ -140,7 +140,7 @@ function initApp(datas) {
                 video.src = url;
                 document.title = file.name;
                 this.cFile = file;
-                console.log(this.cFile);
+                // console.log(this.cFile);
                 setTimeout(function () {
                     video.play();
                 }, 200);
@@ -153,8 +153,7 @@ function initApp(datas) {
                         $nextLi = $li.parents("ul").siblings("ul").find("li").first();
                     }
                 }
-
-                console.log("next:", $nextLi);
+                // console.log("next:", $nextLi);
             },
             clear: function () {
                 this.searchKey = "";
