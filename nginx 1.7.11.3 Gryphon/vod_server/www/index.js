@@ -72,7 +72,6 @@ function initApp(datas) {
             }
         });
 
-
         var buttons3 = [
             {
                 text: '取消',
@@ -100,7 +99,30 @@ function initApp(datas) {
 
     var searchData = JSON.parse(JSON.stringify(datas));
 
+    Vue.component("list", {
+        template: "#list-compo",
+        props: ["data", "files","playUid"],
+        methods: {
+            showImg: function (img) {
+                $.photoBrowser({
+                    photos: [img],
+                    type: 'popup'
+                }).open();
+            },
+            showItemKeysAction: showItemKeysAction,
+            refresh: function (data, file, $event) {
+                vm.refresh(data, file, $event);
+            }
+        }
+    })
+
     var video = document.querySelectorAll('#video')[0];
+    video.addEventListener("ended", function () {
+        if ($nextLi.length) {
+            $nextLi.find(".item-title").click();
+        }
+    },false);
+    var $nextLi = $([])
     var vm = new Vue({
         el: "#app",
         data: {
@@ -112,29 +134,35 @@ function initApp(datas) {
             searchFiles: searchData
         },
         methods: {
-            showItemKeysAction: showItemKeysAction,
             showAction: showAction,
-            refresh: function (data, file) {
+            refresh: function (data, file, $event) {
                 var url = this.host + data.uid + '/' + file.path;
                 video.src = url;
                 document.title = file.name;
                 this.cFile = file;
+                console.log(this.cFile);
                 setTimeout(function () {
                     video.play();
                 }, 200);
+
+                var $li = $($event.target).parents("li");
+                $nextLi = $li.next("li");
+                if (!$nextLi.length) {
+                    $nextLi = $li.parents("ul").next("ul").find("li");
+                    if (!$nextLi.length) {
+                        $nextLi = $li.parents("ul").siblings("ul").find("li").first();
+                    }
+                }
+
+                console.log("next:", $nextLi);
             },
             clear: function () {
                 this.searchKey = "";
             },
             search: function (key) {
                 this.searchKey = key;
-            },
-            showImg: function (img) {
-                $.photoBrowser({
-                    photos: [img],
-                    type: 'popup'
-                }).open();
             }
+
         },
         watch: {
             "searchKey": function (key) {

@@ -18,31 +18,37 @@
 <div id="app">
 
     <div class="page-group">
-        <!-- 单个page ,第一个.page默认被展示-->
         <div class="page">
-            <!-- 标题栏 -->
-            <!--<header class="bar bar-nav">
-                <a class="icon icon-me pull-left open-panel"></a>
-                <h1 class="title">标题</h1>
-            </header>-->
 
-            <!-- 工具栏 -->
-            <!--<nav class="bar bar-tab">
-                <a class="tab-item external active" href="#">
-                    <span class="icon icon-home"></span>
-                    <span class="tab-label">首页</span>
-                </a>
-                <a class="tab-item external" href="#">
-                    <span class="icon icon-star"></span>
-                    <span class="tab-label">收藏</span>
-                </a>
-                <a class="tab-item external" href="#">
-                    <span class="icon icon-settings"></span>
-                    <span class="tab-label">设置</span>
-                </a>
-            </nav>-->
+            <template id="list-compo">
+                <ul>
+                    <template v-for="file in data.files">
+                        <li :class="{'play':playUid==file.uid}" data-uid="file.uid">
+                            <div class="item-content">
+                                <div class="item-media" @click="showImg(file.thumb_path)">
+                                    <img :src="file.thumb_path" style='width: 2.2rem;'>
+                                </div>
+                                <div class="item-inner">
+                                    <div class="item-title-row">
+                                        <div @click="refresh(data,file,$event)" class="item-title">
+                                            <span v-text="file.name"></span>
+                                            <span v-if="file.info.size">
+                                                {{file.info.size[0]}}_{{file.info.size[1]}}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="item-subtitle">
+                                        <span v-text="file.ctime| date '%Y-%m-%d'"></span>
+                                        <span class="action-search"
+                                              @click="showItemKeysAction(file.name)">搜索</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </template>
+                </ul>
+            </template>
 
-            <!-- 这里是页面内容区 -->
             <div class="content">
                 <div class="video">
                     <video id="video" width="100%" src="" autoplay controls></video>
@@ -50,12 +56,12 @@
                 <div class="buttons-tab">
                     <a href="#tab_search" class="tab-link active button">搜索</a>
                     <template v-for="(index,data) in datas">
-                        <a href="#tab{{index}}" class="tab-link  button"
-                           v-text="data.name"></a>
+                        <a href="#tab{{index}}" class="tab-link  button" v-text="data.name"></a>
                     </template>
                 </div>
                 <div class="tabs">
                     <div id="tab_search" class="tab active">
+
                         <div class="content-padded">
                             <div class="searchbar row">
                                 <a @click="showAction" class="button button-fill button-primary col-15">历史</a>
@@ -69,75 +75,26 @@
                         <div class="list-block media-list">
                             <template v-for="data in searchFiles" v-if="data.files.length>0">
                                 <div class="content-block-title" v-text="data.folder"></div>
-                                <ul>
-                                    <template v-for="file in data.files">
-                                        <li :class="{'play':playUid==file.uid}">
-                                            <div class="item-content">
-                                                <div class="item-media" @click="showImg(file.thumb_path)"><img :src="file.thumb_path"
-                                                                             style='width: 2.2rem;'></div>
-                                                <div class="item-inner">
-                                                    <div class="item-title-row">
-                                                        <div @click="refresh(data,file)" class="item-title">
-                                                            <span v-text="file.name"></span>
-                                                            <span v-if="file.info.size">
-                                                                {{file.info.size[0]}}_{{file.info.size[1]}}
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="item-subtitle">
-                                                        <span v-text="file.ctime| date '%Y-%m-%d'"></span>
-                                                        <span class="action-search"
-                                                              @click="showItemKeysAction(file.name)">搜索</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </template>
-                                </ul>
+                                <list :play-uid="playUid" :data="data"></list>
                             </template>
                         </div>
+
                     </div>
 
                     <template v-for="(index,data) in datas">
-
                         <div id="tab{{index}}" class="tab">
                             <div class="list-block media-list">
-                                <ul>
-                                    <template v-for="file in data.files">
-                                        <li :class="{'play':playUid==file.uid}">
-                                            <div class="item-content">
-                                                <div class="item-media" @click="showImg(file.thumb_path)"><img :src="file.thumb_path"
-                                                                             style='width: 2.2rem;'></div>
-                                                <div class="item-inner">
-                                                    <div class="item-title-row">
-                                                        <div @click="refresh(data,file)" class="item-title">
-                                                            <span v-text="file.name"></span>
-                                                            <span v-if="file.info.size">
-                                                                {{file.info.size[0]}}_{{file.info.size[1]}}
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="item-subtitle">
-                                                        <span v-text="file.ctime| date '%Y-%m-%d'"></span>
-                                                        <span class="action-search"
-                                                              @click="showItemKeysAction(file.name)">搜索</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </template>
-
-                                </ul>
+                                <list :play-uid="playUid" :data="data"></list>
                             </div>
                         </div>
                     </template>
+
                 </div>
             </div>
 
         </div>
     </div>
 </div>
-
 
 </body>
 <script src="vendor/zepto.js"></script>
