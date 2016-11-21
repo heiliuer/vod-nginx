@@ -169,7 +169,9 @@ def generate_nginx_conf(datas, file_nginx_config=FILE_NGINX_CONFIG):
     for data in datas:
         f_str = '''
         location /{} {{
-        alias {};
+            mp4_buffer_size       1m;
+            mp4_max_buffer_size   5m;
+            alias {};
         }}'''
         f.write(f_str.format(data['uid'], data['folder']))
 
