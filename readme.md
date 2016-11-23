@@ -16,7 +16,7 @@
 
 ### 如何使用
 
-- 修改 `nginx 1.7.11.3 Gryphon/vod_server/refresh_files/folders.ini` 文件，以回车隔开，例如:
+- 修改 `nginx 1.7.11.3 Gryphon/vod_server/folders.ini` 文件，以回车隔开，例如:
 
     `d:\Users\Administrator\Pictures`    
     `H:\videos`

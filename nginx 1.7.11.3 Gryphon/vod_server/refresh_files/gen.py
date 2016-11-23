@@ -4,9 +4,10 @@
 import hashlib
 import json
 import os
-import config
-import subprocess
 import re
+import subprocess
+
+import config
 
 FILE_JSON = config.CONFIGS['FILE_JSON']
 
@@ -17,7 +18,6 @@ FILE_FFMPEG = config.CONFIGS['FILE_FFMPEG']
 FILE_NGINX_CONFIG = config.CONFIGS['FILE_NGINX_CONFIG']
 
 FILE_PATH_IMAGES = config.CONFIGS['FILE_PATH_IMAGES']
-
 
 
 def read_folder_config(file_config):
@@ -54,7 +54,7 @@ def create_ffmpeg_img(video_file, img_path, size=(300, 200)):
         if dir_valid:
             os.chdir(dirname)
             ffmpeg = os.path.basename(FILE_FFMPEG)
-        cmd = ffmpeg + " -itsoffset -1 -i \"{}\" -vcodec mjpeg -vframes 10 -an -f rawvideo -s {} \"{}\"".format(
+        cmd = ffmpeg + " -itsoffset -1 -i \"{}\" -vcodec mjpeg -vframes 10 -an -f rawvideo -s {} \"{}\" > nul".format(
             video_file, size_str, img_path)
         os.system(cmd)
         if dir_valid:
@@ -95,6 +95,8 @@ def walk_files_by_suffix(folder, suffixs, old_data=dict()):
     for rt, dirs, files in os.walk(folder):
         for f in files:
             rpath = rt.replace(folder, '')
+            if len(rpath) > 0 and rpath[0] == os.path.sep:
+                rpath = rpath[1:]
 
             path = os.path.join(rpath, f)
 
@@ -113,20 +115,17 @@ def walk_files_by_suffix(folder, suffixs, old_data=dict()):
 
                 # F: / 其他 / 影音
                 # print(os.path.commonprefix([folder, rt]))
+                absolute_file = os.path.join(rt, f)
+                md5 = hashlib.md5()
+                md5.update(absolute_file.encode("utf-8"))
+                uid = str(md5.hexdigest())
+                img_file = uid + '.png'
+                img_path = os.path.join(FILE_PATH_IMAGES, img_file)
+                create_ffmpeg_img(absolute_file, img_path)
 
                 if file is not None:
                     data = file
                 else:
-                    if len(rpath) > 0 and rpath[0] == os.path.sep:
-                        rpath = rpath[1:]
-
-                    absolute_file = os.path.join(rt, f)
-                    md5 = hashlib.md5()
-                    md5.update(absolute_file.encode("utf-8"))
-                    uid = str(md5.hexdigest())
-                    img_file = uid + '.png'
-                    img_path = os.path.join(FILE_PATH_IMAGES, img_file)
-                    create_ffmpeg_img(absolute_file, img_path)
                     info = get_video_info(absolute_file)
                     data = {
                         'uid': uid,
@@ -134,10 +133,10 @@ def walk_files_by_suffix(folder, suffixs, old_data=dict()):
                         'name': fname[0],
                         'suffix': suffix,
                         'ctime': int(os.stat(absolute_file).st_ctime) * 1000,
-                        'thumb_path': os.path.join(os.path.basename(os.path.dirname(os.path.abspath(img_path))),
-                                                   img_file),
                         'info': info
                     }
+                data['thumb_path'] = os.path.join(os.path.basename(os.path.dirname(os.path.abspath(img_path))),
+                                                  img_file)
                 relativeFiles.append(data)
     relativeFiles = sorted(relativeFiles, key=sort_time, reverse=True)
     return relativeFiles

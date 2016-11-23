@@ -2,7 +2,7 @@
 
 cd "nginx 1.7.11.3 Gryphon"
 
-echo scanning files
+echo scanning files ...
 cd vod_server/refresh_files
 gen.py>nul
 cd ../../
@@ -10,10 +10,10 @@ cd ../../
 
 tasklist|findstr nginx>nul
 if not "%ERRORLEVEL%" == "0" (
-    echo start nginx
+    echo starting nginx
 	start nginx
 ) else (
-    echo reload nginx
+    echo reloading nginx ...
 	nginx -s reload
 )
 
@@ -21,7 +21,7 @@ if not "%ERRORLEVEL%" == "0" (
 
 cd ../
 
-echo exit ... 2s 
+echo completing ...
 ping 127.1 -n 2 >nul
 
 
