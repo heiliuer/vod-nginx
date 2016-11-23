@@ -18,7 +18,6 @@ FILE_NGINX_CONFIG = config.CONFIGS['FILE_NGINX_CONFIG']
 
 FILE_PATH_IMAGES = config.CONFIGS['FILE_PATH_IMAGES']
 
-md5 = hashlib.md5()
 
 
 def read_folder_config(file_config):
@@ -90,11 +89,17 @@ def get_video_info(video_file):
     return info
 
 
-def walk_files_by_suffix(folder, suffixs):
+def walk_files_by_suffix(folder, suffixs, old_data=dict()):
     # folder F:/其他/影音
     relativeFiles = []
     for rt, dirs, files in os.walk(folder):
         for f in files:
+            rpath = rt.replace(folder, '')
+
+            path = os.path.join(rpath, f)
+
+            file = find_old_file_by_folder(old_data, path)
+
             fname = os.path.splitext(f)
             if len(fname) < 2:
                 break
@@ -108,46 +113,52 @@ def walk_files_by_suffix(folder, suffixs):
 
                 # F: / 其他 / 影音
                 # print(os.path.commonprefix([folder, rt]))
-                rpath = rt.replace(folder, '')
-                if len(rpath) > 0 and rpath[0] == os.path.sep:
-                    rpath = rpath[1:]
 
-                absolute_file = os.path.join(rt, f)
-                uid = str(md5.hexdigest())
+                if file is not None:
+                    data = file
+                else:
+                    if len(rpath) > 0 and rpath[0] == os.path.sep:
+                        rpath = rpath[1:]
 
-                img_file = uid + '.png'
-                img_path = os.path.join(FILE_PATH_IMAGES, img_file)
-
-                create_ffmpeg_img(absolute_file, img_path)
-
-                info = get_video_info(absolute_file)
-
-                md5.update(absolute_file.encode("utf-8"))
-
-                data = {
-                    'uid': uid,
-                    'path': os.path.join(rpath, f),
-                    'name': fname[0],
-                    'suffix': suffix,
-                    'ctime': int(os.stat(absolute_file).st_ctime) * 1000,
-                    'thumb_path': os.path.join(os.path.basename(os.path.dirname(os.path.abspath(img_path))), img_file),
-                    'info': info
-                }
+                    absolute_file = os.path.join(rt, f)
+                    md5 = hashlib.md5()
+                    md5.update(absolute_file.encode("utf-8"))
+                    uid = str(md5.hexdigest())
+                    img_file = uid + '.png'
+                    img_path = os.path.join(FILE_PATH_IMAGES, img_file)
+                    create_ffmpeg_img(absolute_file, img_path)
+                    info = get_video_info(absolute_file)
+                    data = {
+                        'uid': uid,
+                        'path': path,
+                        'name': fname[0],
+                        'suffix': suffix,
+                        'ctime': int(os.stat(absolute_file).st_ctime) * 1000,
+                        'thumb_path': os.path.join(os.path.basename(os.path.dirname(os.path.abspath(img_path))),
+                                                   img_file),
+                        'info': info
+                    }
                 relativeFiles.append(data)
-    relativeFiles = sorted(relativeFiles,key = sort_time,reverse = True)
+    relativeFiles = sorted(relativeFiles, key=sort_time, reverse=True)
     return relativeFiles
+
 
 def sort_time(data):
     return data['ctime']
 
+
 def handle(suffixs, file_config=FILE_CONFIG, file_json=FILE_JSON):
+    old_datas = read_old_datas()
     folders = read_folder_config(file_config)
     data = []
     size = 0
+
     for folder in folders:
-        files = walk_files_by_suffix(folder, suffixs)
+        old_data = find_old_data_by_folder(old_datas, folder)
+        files = walk_files_by_suffix(folder, suffixs, old_data)
         size += len(files)
         if len(files) > 0:
+            md5 = hashlib.md5()
             md5.update(folder.encode("utf-8"))
             data.append(
                 {'folder': folder, 'name': os.path.basename(folder), 'files': files,
@@ -174,6 +185,28 @@ def generate_nginx_conf(datas, file_nginx_config=FILE_NGINX_CONFIG):
             alias {};
         }}'''
         f.write(f_str.format(data['uid'], data['folder']))
+
+
+def read_old_datas(file_json=FILE_JSON):
+    if os.path.isfile(file_json):
+        data = json.load(open(file_json))
+        return data
+    return []
+
+
+def find_old_data_by_folder(old_datas, folder):
+    for data in old_datas:
+        if data["folder"] == folder:
+            return data
+    return None
+
+
+def find_old_file_by_folder(old_data, path):
+    if old_data is not None and "files" in old_data:
+        for file in old_data["files"]:
+            if file["path"] == path:
+                return file
+    return None
 
 
 def main():

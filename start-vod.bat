@@ -17,11 +17,12 @@ if not "%ERRORLEVEL%" == "0" (
 	nginx -s reload
 )
 
-start vod_server/refresh_files/ipStart.py 80
+::start vod_server/refresh_files/ipStart.py 80
 
 cd ../
 
-ping 127.1 -n 3 >nul
+echo exit ... 2s 
+ping 127.1 -n 2 >nul
 
 
 
