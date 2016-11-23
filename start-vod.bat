@@ -21,7 +21,7 @@ start vod_server/refresh_files/ipStart.py 80
 
 cd ../
 
-ping -s 5 127.0 >nul
+ping 127.1 -n 3 >nul
 
 
 
