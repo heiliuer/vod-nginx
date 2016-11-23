@@ -7,15 +7,21 @@ cd vod_server/refresh_files
 gen.py>nul
 cd ../../
 
-echo reload nginx
+
 tasklist|findstr nginx>nul
 if not "%ERRORLEVEL%" == "0" (
+    echo start nginx
 	start nginx
 ) else (
+    echo reload nginx
 	nginx -s reload
 )
+
+start vod_server/refresh_files/ipStart.py 80
+
 cd ../
-pause
+
+ping -s 5 127.0 >nul
 
 
 

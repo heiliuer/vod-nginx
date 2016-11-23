@@ -21,12 +21,8 @@
     `d:\Users\Administrator\Pictures`
     
     `H:\videos`
-
-- 在nginx 1.7.11.3 Gryphon目录运行命令，启动nginx   
-
-    `start nginx`
         
-- 在项目根目录运行命令，扫描视频文件
+- 在项目根目录运行命令：start或者reload nginx，扫描视频文件
 
     `start-vod.bat`
     
