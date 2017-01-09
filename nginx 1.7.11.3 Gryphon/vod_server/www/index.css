@@ -21,6 +21,10 @@ template {
     }
 }
 
+.item-content:active {
+    opacity: 0.7;
+}
+
 .list-block .item-content {
     cursor: pointer;
 }
