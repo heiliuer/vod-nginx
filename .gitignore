@@ -1,2 +1,5 @@
 /nginx 1.7.11.3 Gryphon/vod_server/www/images
 /.idea
+/nginx 1.7.11.3 Gryphon/logs
+/nginx 1.7.11.3 Gryphon/vod_server/www/.idea
+/nginx 1.7.11.3 Gryphon/vod_server/refresh_files/__pycache__
