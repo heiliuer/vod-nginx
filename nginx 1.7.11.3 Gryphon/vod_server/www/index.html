@@ -53,6 +53,7 @@
                 <video id="video" width="100%" src="" autoplay controls></video>
             </div>
             <div class="buttons-tab">
+                <a href="javascript:;" @click="showAbout" class="tab-link button tab-link-about"><span class="icon icon-code"></span></a>
                 <a href="#tab_search" class="tab-link active button">搜索</a>
                 <template v-for="(index,data) in datas">
                     <a href="#tab{{index}}" class="tab-link  button" v-text="data.name"></a>

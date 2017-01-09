@@ -53,6 +53,11 @@ template {
     z-index: 100;
 }
 
+.buttons-tab .tab-link-about{
+    -webkit-box-flex: inherit;
+    width: auto;
+}
+
 .tabs {
     padding-top: calc(56.25% + 2.5rem);
     padding-bottom: 0.5rem;

@@ -96,12 +96,26 @@ function initApp(datas) {
         storeHistories();
     }
 
+    function showAbout() {
+        $.modal({
+            title: '扫码分享此网址',
+            text: '<img width="200" height="200" src="http://qr.liantu.com/api.php?text=' + location.href + '"> <br/> © 2016 heiliuer',
+            buttons: [
+                {
+                    text: '确定',
+                    onClick: function () {
+                    }
+                }
+            ]
+        })
+    }
+
 
     var searchData = JSON.parse(JSON.stringify(datas));
 
     Vue.component("list", {
         template: "#list-compo",
-        props: ["data", "files","playUid"],
+        props: ["data", "files", "playUid"],
         methods: {
             showImg: function (img) {
                 $.photoBrowser({
@@ -121,7 +135,7 @@ function initApp(datas) {
         if ($nextLi.length) {
             $nextLi.find(".item-title").click();
         }
-    },false);
+    }, false);
     var $nextLi = $([])
     var vm = new Vue({
         el: "#app",
@@ -134,6 +148,7 @@ function initApp(datas) {
             searchFiles: searchData
         },
         methods: {
+            showAbout: showAbout,
             showAction: showAction,
             refresh: function (data, file, $event) {
                 var url = this.host + data.uid + '/' + file.path;
