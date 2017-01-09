@@ -9,6 +9,14 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="renderer" content="webkit|ie-comp|ie-stand">
+
+    <!-全屏-->
+    <meta name="full-screen" content="yes">
+    <meta name="browsermode" content="application">
+    <meta name="x5-orientation" content="portrait">
+    <meta name="x5-fullscreen" content="true">
+    <meta name="x5-page-mode" content="app">
+
     <link rel="stylesheet" href="vendor/sm.css">
     <link rel="stylesheet" href="vendor/sm-extend.css">
     <link rel="stylesheet" href="vendor/animate.css">
@@ -39,8 +47,8 @@
                                     </div>
                                     <div class="item-subtitle">
                                         <span v-text="file.ctime| date '%Y-%m-%d'"></span>
-                                        <span class="action-search"
-                                              @click="showItemKeysAction(file.name)">搜索</span>
+                                        <span @click="showItemKeysAction(file.name)"
+                                              class="action-search icon icon-search"></span>
                                     </div>
                                 </div>
                             </div>
@@ -57,7 +65,8 @@
                 <template v-for="(index,data) in datas">
                     <a href="#tab{{index}}" class="tab-link  button" v-text="data.name"></a>
                 </template>
-                <a href="javascript:;" @click="showAbout" class="tab-link button tab-link-about"><span class="icon icon-code"></span></a>
+                <a href="javascript:;" @click="showAbout" class="tab-link button tab-link-about"><span
+                        class="icon icon-code"></span></a>
             </div>
             <div class="content">
 

@@ -21,6 +21,10 @@ template {
     }
 }
 
+.buttons-tab .button {
+    border: none;
+}
+
 .item-content:active {
     opacity: 0.7;
 }
